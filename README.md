@@ -17,11 +17,11 @@ Wide and Deep > Xgboost > Random Forest > Logistic > SVM
 2. Preview data
 3. Drop unrelated column.
 4. Fill NA
-  a. by other column logically.
-  b. using median or mean.
-  c. using random forest to predict.
+  - by other column logically.
+  - using median or mean.
+  - using random forest to predict.
 5. Denoise
-  a. using IsolationForest(sklearn).
+  - using IsolationForest(sklearn).
 6. Select Model
-  a. Using GridSearchCV, select best models and best params.
+  - Using GridSearchCV, select best models and best params.
 7. Apply on test samples and score.
