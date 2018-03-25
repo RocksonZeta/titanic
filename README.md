@@ -22,6 +22,6 @@ Wide and Deep > Xgboost > Random Forest > Logistic > SVM
   - using random forest to predict.
 5. **Denoise**
   - using IsolationForest(sklearn).
-6. **Select Model****
+6. **Select Model**
   - Using GridSearchCV, select best models and best params.
 7. **Apply on test samples and score.**
