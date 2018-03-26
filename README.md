@@ -14,15 +14,17 @@ Wide and Deep > Xgboost > Random Forest > Logistic > SVM
 ### Pipeline :
 0. **Clear and definite the problem.(Input and Output).**
 1. **Load data. Build DataFactory(Dataset).**
-2. **Preview data**
-3. **Drop unrelated column.**
-4. **Fill NA**
+2. **Drop unrelated column.**
+3. **Preview data**
+4. **Map Categorical Value.**
+5. **Fill NA.**  
   - by other column logically.
   - using median or mean.
   - using random forest to predict.
-5. **Denoise**
+6. **Denoise(Remove Outlier)**
   - using IsolationForest(sklearn).
-6. **Select Model**
+7. **Composite more features.**
+8. **Select Model**
   - Using GridSearchCV, select best models and best params.
-7. **Apply on test samples and score.**
-8. **Save model and output.**
+9. **Apply on test samples and score.**
+10. **Save model and output.**
