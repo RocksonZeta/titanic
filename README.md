@@ -6,7 +6,7 @@ titanic in traditional machine learning
 ```
 Model on test:
 Wide and Deep > Xgboost > Random Forest > Logistic > SVM
-0.93            0.89      0.88            0.88        0.80
+0.80            0.79      0.7655            0.76        0.75
 
 ```
 
