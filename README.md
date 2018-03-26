@@ -18,7 +18,7 @@ Wide and Deep > Xgboost > Random Forest > Logistic > SVM
 3. **Preview data**
 4. **Map Categorical Value.**
 5. **Fill NA.**  
-  - by other column logically.
+ - by other column logically.
   - using median or mean.
   - using random forest to predict.
 6. **Denoise(Remove Outlier)**
