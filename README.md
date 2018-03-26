@@ -12,7 +12,7 @@ Wide and Deep > Xgboost > Random Forest > Logistic > SVM
 
 
 ### Pipeline :
-0. **Clear and definite the problem.(input and output).**
+0. **Clear and definite the problem.(Input and Output).**
 1. **Load data. Build DataFactory(Dataset).**
 2. **Preview data**
 3. **Drop unrelated column.**
@@ -25,3 +25,4 @@ Wide and Deep > Xgboost > Random Forest > Logistic > SVM
 6. **Select Model**
   - Using GridSearchCV, select best models and best params.
 7. **Apply on test samples and score.**
+8. **Save model and output.**
