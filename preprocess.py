@@ -28,10 +28,11 @@ def randomForesetSetValue(df,cols , regression=True):
 
 def drop_col(df):
 	return df.drop(['PassengerId','Cabin','Name','Ticket'],axis=1)
-def fill_missing_data(df , is_train=True):
+def fill_missing_data(df , is_train=True ,sex_cat=False, embarked_one_hot=False):
 	print("preprocess data")
 	# df = drop_col(df)
-	# df['Sex'] = df.Sex.map({'female':0,'male':1}).astype(int)
+	if sex_cat:
+		df['Sex'] = df.Sex.map({'female':0,'male':1}).astype(int)
 	# Fare should > 0, fill Fare by pclass ,using median of pclass
 	if len(df.Fare[df.Fare.isnull()]) > 0:
 		fare = np.zeros(3)
@@ -41,12 +42,13 @@ def fill_missing_data(df , is_train=True):
 			df.loc[(df.Fare.isnull()) & (df.Pclass == f + 1), 'Fare'] = fare[f]
 	#默认用S
 	df.loc[(df.Embarked.isnull()), 'Embarked'] = 'S'
-	# df['Embarked'] = df['Embarked'].map({'S': 0, 'C': 1, 'Q': 2, 'U': 0}).astype(int)
-	# embarked_data = pd.get_dummies(df.Embarked)
-	# embarked_data = embarked_data.rename(columns=lambda x: 'Embarked_' + str(x))
-	# df = pd.concat([df, embarked_data], axis=1)
+	if embarked_one_hot:
+		df['Embarked'] = df['Embarked'].map({'S': 0, 'C': 1, 'Q': 2, 'U': 0}).astype(int)
+		embarked_data = pd.get_dummies(df.Embarked)
+		embarked_data = embarked_data.rename(columns=lambda x: 'Embarked_' + str(x))
+		df = pd.concat([df, embarked_data], axis=1)
+		df = df.drop('Embarked',axis=1)
 
-	# df = df.drop('Embarked',axis=1)
 	if is_train:
 		randomForesetSetValue(df , ['Age','Survived', 'Fare', 'Parch', 'SibSp', 'Pclass'])
 	else :

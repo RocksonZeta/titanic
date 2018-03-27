@@ -11,12 +11,12 @@ import pandas as pd
 
 svc_params = [
 	{
-		'C': [1, 3, 5, 7, 9, 11, 13, 15, 17, 19],
-		'gamma': [0.00001, 0.0001, 0.001, 0.1, 1, 10, 100, 1000],
+		'C': [1, 3, 5, 7, 9],
+		'gamma': [ 0.001, 0.01, 0.1, 1, 10],
 		'kernel': ['rbf']
 	},
 	{
-		'C': [1, 3, 5, 7, 9, 11, 13, 15, 17, 19],
+		'C': [1, 3, 5, 7, 9],
 		'kernel': ['linear']
 	}
 ]
@@ -52,10 +52,10 @@ xgboost_param = {
 }
 
 models =[
-	# ('Xgboost',xg.XGBClassifier(),xgboost_param),
-	('RandomForest', RandomForestClassifier(n_estimators=100),random_forest_param),
-# 	('Logistic' , LogisticRegression(),logistic_params),
-# 	('SVM' , SVC() , svc_params),
+	('Xgboost',xg.XGBClassifier(),xgboost_param),
+	('RandomForest', RandomForestClassifier(n_estimators=500),random_forest_param),
+	('Logistic' , LogisticRegression(),logistic_params),
+	('SVM' , SVC() , svc_params),
 ]
 
 def model_selection(x_train ,y_train,x_test,y_test):
@@ -71,20 +71,23 @@ def model_selection(x_train ,y_train,x_test,y_test):
 		y_pred = clf.predict(x_train)
 		print(classification_report(y_true=y_train, y_pred=y_pred))
 		y_test_pred = clf.predict(x_test)
-		print(classification_report(y_true=y_test, y_pred=y_test_pred))
-
+		# print(classification_report(y_true=y_test, y_pred=y_test_pred))
+		# df_test_y = pd.DataFrame(y_test_pred , columns=['Survived'])
+		df = pd.DataFrame(data.get_test_PassengerId()).join(pd.DataFrame(y_test_pred , columns=['Survived']))
+		print(df.head())
+		df.to_csv('./titanic_test_result_'+m[0]+'.csv',index=False)
 
 import data,preprocess
 if '__main__' == __name__:
 	train_data = data.get_train_data()
-	train_data =preprocess.fill_missing_data(train_data)
+	train_data =preprocess.fill_missing_data(train_data ,sex_cat=True, embarked_one_hot=True)
 	# train_data = preprocess.feature_selection(train_data)
-	train_data = preprocess.detect_outlier(train_data,drop=True)
+	# train_data = preprocess.detect_outlier(train_data,drop=True)
 	print(train_data.head())
 	x_train,y_train = data.split(train_data)
 	# print(y_train.values)
 	x_test,y_test = data.get_test_x(),data.get_test_y()
-	x_test =preprocess.fill_missing_data(x_test,False)
+	x_test =preprocess.fill_missing_data(x_test,is_train=False,sex_cat=True, embarked_one_hot=True)
 	# poly = PolynomialFeatures(2,interaction_only=True)
 	# x_train = poly.fit_transform(x_train.values)
 	# x_test = poly.fit_transform(x_test.values)

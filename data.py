@@ -17,6 +17,8 @@ def get_test_x(drop=True):
 	return df
 def get_test_y():
 	return pd.read_csv(test_y_file).Survived
+def get_test_PassengerId():
+	return pd.read_csv(test_file).PassengerId
 
 # def get_data():
 # 	train = get_train_data()

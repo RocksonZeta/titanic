@@ -1,6 +1,7 @@
 import tensorflow as tf
 import data
 import matplotlib.pyplot as plt
+import pandas as pd
 
 _CSV_COLUMNS = [
 	'PassengerId','Survived','Pclass','Name','Sex','Age',
@@ -65,7 +66,7 @@ deep_columns = [
 	indicator_column(Embarked),
 ]
 
-hidden_units = [100,200,100,75, 50, 25]
+hidden_units = [100,75, 50, 25]
 
 run_config = tf.estimator.RunConfig().replace(
     session_config=tf.ConfigProto(device_count={'GPU': 0}))
@@ -75,23 +76,35 @@ model = tf.estimator.DNNLinearCombinedClassifier(
         linear_feature_columns=wide_columns,
         dnn_feature_columns=deep_columns,
         dnn_hidden_units=hidden_units,
-		dnn_dropout=0.3,
+		# dnn_dropout=0.3,
 		dnn_optimizer='Adam',
         config=run_config)
 
 import preprocess
 train_data = data.get_train_data()
+print(train_data.head())
+# train_data = preprocess.detect_outlier(train_data,True)
 train_data =preprocess.fill_missing_data(train_data)
 x,y = data.split(train_data)
 x_test ,y_test = data.get_test_x(),data.get_test_y()
 x_test =preprocess.fill_missing_data(x_test,False)
 
 
-for n in range(100):
-	model.train(input_fn=pandas_input_fn(x,y,shuffle=True))
-	results = model.evaluate(input_fn=pandas_input_fn(x_test,y_test,shuffle=True))
-	# Display evaluation metrics
-	print('----------- Results at epoch', (n + 1),'-------------')
+# for n in range(50):
+# 	model.train(input_fn=pandas_input_fn(x,y,shuffle=True))
+# 	results = model.evaluate(input_fn=pandas_input_fn(x,y,shuffle=False))
+# 	# Display evaluation metrics
+# 	print('----------- Results at epoch', (n + 1),'-------------')
 
-	for key in sorted(results):
-		print('%s: %s' % (key, results[key]))
+# 	for key in sorted(results):
+# 		print('%s: %s' % (key, results[key]))
+
+import numpy as np
+results = model.predict(input_fn=pandas_input_fn(x_test,y_test,shuffle=False))
+df = np.stack(pd.DataFrame(results).class_ids.values ,axis=0).reshape(-1)
+df = pd.DataFrame(data.get_test_PassengerId()).join(pd.DataFrame(df , columns=['Survived']))
+print(df)
+df.to_csv('./titanic_test_result.csv',index=False)
+# for r in results:
+# 	print(r['classes'])
+# 	break
